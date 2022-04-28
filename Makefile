@@ -1,3 +1,5 @@
+CFLAGS = -DUNSHARE
+
 all: cgiscript cgiscript.py
 
 cgiscript: shim.o shim.py.o
@@ -20,6 +22,18 @@ clean:
 	rm cgiscript.py 2> /dev/null || true
 	rm cgiscript 2> /dev/null || true
 
+.htaccess:
+	@echo '<Files cgiscript>'
+	@echo '	SetHandler cgi-script'
+	@echo '	Options +ExecCGI'
+	@echo '</Files>'
+	@echo '<Files cgiscript.py>'
+	@echo '	Require all denied'
+	@echo '</Files>'
+
 help:
-	@echo "'make' to compile normal version"
-	@echo "'make CFLAGS=-DUNSAFE' to compile the unsafe version"
+	@echo "'make' to compile \e[1;32mnormal version\e[0m"
+	@echo "'make CFLAGS='-DUNSHARE' to compile \e[1;32msafe\e[0m version \e[1;32mwith unsharing\e[0m (default)"
+	@echo "'make CFLAGS='' to compile the \e[1;32msafe\e[0m version \e[1;31mwithout unsharing\e[0m"
+	@echo "'make CFLAGS='-DUNSAFE -UNSHARE' to compile the \e[1;31munsafe\e[0m version \e[1;32mwith unsharing\e[0m"
+	@echo "'make CFLAGS='-DUNSAFE' to compile the \e[1;31munsafe\e[0m version \e[1;31mwithout unsharing\e[0m"

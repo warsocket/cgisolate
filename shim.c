@@ -1,8 +1,30 @@
+#ifdef UNSHARE
+	#define _GNU_SOURCE
+	#include <sched.h>
+
+	//see unshare(2) for information om flags
+	const int flags = 0
+	| CLONE_FILES
+	| CLONE_FS
+	| CLONE_NEWCGROUP
+	| CLONE_NEWIPC
+	| CLONE_NEWNET
+	| CLONE_NEWNS
+	| CLONE_NEWPID
+	// | CLONE_NEWTIME //tad too modern
+	// | CLONE_NEWUSER
+	| CLONE_NEWUTS
+	| CLONE_SYSVSEM
+	;
+#endif
+
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
 #include <fcntl.h>
+#include <sys/wait.h>
+
 
 extern const char _binary_shim_py_start[];
 extern const char _binary_shim_py_end[];
@@ -31,6 +53,15 @@ int main(int argc, char const *argv[])
 
 		for(int i=0; i<prologue_size; ++i){
 			if (_binary_shim_py_start[i] != cmp[i]) exit(2);
+		}
+	#endif
+
+	#ifdef UNSHARE
+		unshare(flags);
+
+		if (fork()) {
+			wait(NULL); // Wait for child completion
+			return 0;
 		}
 	#endif
 
