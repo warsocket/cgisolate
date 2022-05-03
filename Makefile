@@ -1,9 +1,10 @@
 CFLAGS = -DUNSHARE
+LIBFLAGS = -lcap -pthread
 
 all: cgiscript cgiscript.py
 
 cgiscript: shim.o shim.py.o
-	gcc $(CFLAGS) shim.o shim.py.o -o cgiscript
+	gcc $(CFLAGS) shim.o shim.py.o -o cgiscript $(LIBFLAGS)
 
 cgiscript.py:
 	cat shim.py > cgiscript.py
@@ -14,7 +15,7 @@ shim.py.o:
 	ld -r -b binary -o shim.py.o shim.py
 
 shim.o:
-	gcc $(CFLAGS) -c shim.c -o shim.o
+	gcc $(CFLAGS) -c shim.c -o shim.o $(LIBFLAGS)
 
 clean: 
 	rm shim.o 2> /dev/null || true
