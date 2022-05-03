@@ -103,7 +103,6 @@ int main(int argc, char const *argv[])
 		unshare(flags & CLONE_NEWUSER); //THis breaks some permissions it seems
 		sem_post(&sync->unshare_wait); //child done with unshare
 		sem_wait(&sync->idmap_wait); //child waiting for parent to write *id_map files
-		sethostname("xxx", 3); // eg setting hostname
 	#endif
 
 	// execv("/bin/bash", NULL);
