@@ -1,4 +1,3 @@
-CFLAGS = -DUNSHARE
 LIBFLAGS = -lcap -pthread
 
 all: cgiscript cgiscript.py
@@ -34,7 +33,10 @@ clean:
 
 help:
 	@echo "'make' to compile \e[1;32mnormal version\e[0m"
-	@echo "'make CFLAGS='-DUNSHARE' to compile \e[1;32msafe\e[0m version \e[1;32mwith unsharing\e[0m (default)"
-	@echo "'make CFLAGS='' to compile the \e[1;32msafe\e[0m version \e[1;31mwithout unsharing\e[0m"
-	@echo "'make CFLAGS='-DUNSAFE -UNSHARE' to compile the \e[1;31munsafe\e[0m version \e[1;32mwith unsharing\e[0m"
-	@echo "'make CFLAGS='-DUNSAFE' to compile the \e[1;31munsafe\e[0m version \e[1;31mwithout unsharing\e[0m"
+	@echo "'make CFLAGS='' LIBFLAGS='$(LIBFLAGS) to compile \e[1;32msafe\e[0m version (default)"
+	@echo "'make CFLAGS='-DUNSAFE' to compile the \e[1;31munsafe\e[0m version"
+	@echo "'make LIBFLAGS='$(LIBFLAGS) -static' to compile the static version (larger but more portable)"
+	@echo "CFLAGS and LIBFLAGS can be combined if desired"
+	@echo ""
+	@echo "Dont't forget to chown root:root and chmod u+s the cgiscript binary after installation"
+ 
